@@ -1,69 +1,50 @@
-# React + TypeScript + Vite
+# Skyline Travels
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A modern, mobile-first travel agency website with built-in admin dashboard, real-time enquiry notifications, image uploads, and free deployment on Vercel.
 
-Currently, two official plugins are available:
+**Stack:** Next.js 15 (App Router) · React 19 · TypeScript · Tailwind CSS · shadcn/ui primitives · Framer Motion · Three.js (react-three-fiber) · Supabase (Postgres + Auth + Storage + Realtime) · Recharts · Web Push.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Everything used is free and open-source. Production cost on the free tiers is ₹0 — you only pay for the domain (and optionally WhatsApp API in the future).
 
-## Expanding the ESLint configuration
+## Features
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+### Public site
+- Animated hero with subtle 3D scene (disabled on mobile / reduced-motion)
+- Featured fleet with photos, pricing and per-km breakdown
+- Per-car detail page with image gallery
+- Mobile-first responsive layout, installable as a PWA
+- Single-form enquiry dialog with travel-type switcher (Local · Intercity · Airport · Package)
 
-```js
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+### Admin (`/admin`)
+- Email/password sign-in (Supabase Auth) — no public signup
+- Dashboard with month-wise enquiry chart (last 12 months), counts, deltas, recent enquiries
+- Enquiries table: filters by status/type, free-text search, one-click status update, realtime refresh, tap-to-call phone numbers
+- Fleet manager: full CRUD with multi-image upload to Supabase Storage, set primary image, publish/hide
+- Agency settings: brand, contact, address
+- **Super-admin** only: create/delete admin users and assign them to an agency
 
-      // Remove tseslint.configs.recommended and replace with this
-      ...tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      ...tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      ...tseslint.configs.stylisticTypeChecked,
+### Notifications
+- Web Push (works on Chrome desktop & Android) — admin clicks "Enable notifications" once and gets a push for every new enquiry, even with the tab closed
+- The same enquiry is also broadcast via Supabase Realtime, so any open admin tab refreshes instantly
+- WhatsApp notifications are a future enhancement; nothing in the data model needs to change to add them
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+### Roles
+| Role | What they can do |
+|---|---|
+| **Public visitor** | Browse cars, submit enquiries (no login) |
+| **agency_admin** | Manage their agency's cars, enquiries and profile |
+| **super_admin (you)** | All of the above, for any agency, plus create new agencies/admins |
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## Quick start
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+1. Copy env file and fill in Supabase keys:
+   ```powershell
+   Copy-Item .env.example .env.local
+   ```
+2. Install deps & run dev server:
+   ```powershell
+   npm install
+   npm run dev
+   ```
 
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+See [SETUP.md](SETUP.md) for the full step-by-step guide (Supabase project, schema, super-admin bootstrap, VAPID keys, Vercel deploy, custom domain).
