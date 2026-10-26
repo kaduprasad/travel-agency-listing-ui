@@ -6,7 +6,7 @@ import { Menu, Phone, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import type { Agency } from "@/lib/database.types";
+import type { Agency } from "@/lib/data/site-data";
 
 const NAV = [
   { href: "/", label: "Home" },

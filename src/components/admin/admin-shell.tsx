@@ -33,7 +33,11 @@ export function AdminShell({
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = React.useState(false);
 
-  const items = NAV.filter((i) => !i.superOnly || profile.role === "super_admin");
+  const devRoleOverride = process.env.NEXT_PUBLIC_DEV_ROLE_OVERRIDE as string | undefined;
+  const effectiveRole = (devRoleOverride === "agency_admin" || devRoleOverride === "super_admin")
+    ? devRoleOverride
+    : profile.role;
+  const items = NAV.filter((i) => !i.superOnly || effectiveRole === "super_admin");
 
   return (
     <div className="flex min-h-screen bg-muted/30">
@@ -73,6 +77,11 @@ export function AdminShell({
             {agency ? agency.name : "Admin"}
           </div>
           <EnableNotificationsButton />
+          {process.env.NEXT_PUBLIC_DEV_ROLE_OVERRIDE && (
+            <span className="hidden rounded-full bg-yellow-100 px-2 py-0.5 text-xs font-semibold text-yellow-800 sm:inline">
+              FF: {process.env.NEXT_PUBLIC_DEV_ROLE_OVERRIDE}
+            </span>
+          )}
         </header>
         <main className="flex-1 px-4 py-6 lg:px-8 lg:py-8">{children}</main>
       </div>

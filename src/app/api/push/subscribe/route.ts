@@ -1,6 +1,7 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { z } from "zod";
 import { createClient } from "@/lib/supabase/server";
+import { DATABASE_ENABLED } from "@/lib/constants";
 
 export const runtime = "nodejs";
 
@@ -14,6 +15,7 @@ const schema = z.object({
 });
 
 export async function POST(request: NextRequest) {
+  if (!DATABASE_ENABLED) return NextResponse.json({ ok: false, error: "Database features are disabled." }, { status: 503 });
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return NextResponse.json({ ok: false, error: "Not authenticated" }, { status: 401 });
@@ -43,6 +45,7 @@ export async function POST(request: NextRequest) {
 }
 
 export async function DELETE(request: NextRequest) {
+  if (!DATABASE_ENABLED) return NextResponse.json({ ok: false, error: "Database features are disabled." }, { status: 503 });
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return NextResponse.json({ ok: false, error: "Not authenticated" }, { status: 401 });

@@ -2,11 +2,13 @@ import { Suspense } from "react";
 import Link from "next/link";
 import { LoginForm } from "./login-form";
 import { ArrowLeft } from "lucide-react";
-import { SITE_NAME } from "@/lib/constants";
+import { DATABASE_ENABLED, SITE_NAME } from "@/lib/constants";
+import { redirect } from "next/navigation";
 
 export const metadata = { title: "Admin Sign In" };
 
 export default function LoginPage() {
+  if (!DATABASE_ENABLED) redirect("/");
   return (
     <div className="min-h-screen relative flex items-center justify-center px-4 overflow-hidden bg-gradient-to-br from-slate-950 via-brand-900 to-slate-950">
       <div className="absolute inset-0 bg-grid opacity-30" aria-hidden />

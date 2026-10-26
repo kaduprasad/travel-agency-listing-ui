@@ -1,50 +1,34 @@
 # Skyline Travels
 
-A modern, mobile-first travel agency website with built-in admin dashboard, real-time enquiry notifications, image uploads, and free deployment on Vercel.
+A mobile-first car rental website for Skyline Travels. It runs on Next.js and deploys to Vercel without a database, API keys, or other environment variables.
 
-**Stack:** Next.js 15 (App Router) · React 19 · TypeScript · Tailwind CSS · shadcn/ui primitives · Framer Motion · Three.js (react-three-fiber) · Supabase (Postgres + Auth + Storage + Realtime) · Recharts · Web Push.
+## Included
 
-Everything used is free and open-source. Production cost on the free tiers is ₹0 — you only pay for the domain (and optionally WhatsApp API in the future).
+- Public home, fleet, car detail, about, and contact pages
+- Four sample vehicles with rates, seating, features, and photo galleries
+- Responsive layout and animated landing page
+- Enquiry form that opens WhatsApp with the trip details prefilled
+- Database-backed admin and API code retained but disabled by default
 
-## Features
+## Run locally
 
-### Public site
-- Animated hero with subtle 3D scene (disabled on mobile / reduced-motion)
-- Featured fleet with photos, pricing and per-km breakdown
-- Per-car detail page with image gallery
-- Mobile-first responsive layout, installable as a PWA
-- Single-form enquiry dialog with travel-type switcher (Local · Intercity · Airport · Package)
+```powershell
+npm install
+npm run dev
+```
 
-### Admin (`/admin`)
-- Email/password sign-in (Supabase Auth) — no public signup
-- Dashboard with month-wise enquiry chart (last 12 months), counts, deltas, recent enquiries
-- Enquiries table: filters by status/type, free-text search, one-click status update, realtime refresh, tap-to-call phone numbers
-- Fleet manager: full CRUD with multi-image upload to Supabase Storage, set primary image, publish/hide
-- Agency settings: brand, contact, address
-- **Super-admin** only: create/delete admin users and assign them to an agency
+Open http://localhost:3000.
 
-### Notifications
-- Web Push (works on Chrome desktop & Android) — admin clicks "Enable notifications" once and gets a push for every new enquiry, even with the tab closed
-- The same enquiry is also broadcast via Supabase Realtime, so any open admin tab refreshes instantly
-- WhatsApp notifications are a future enhancement; nothing in the data model needs to change to add them
+## Edit agency and car details
 
-### Roles
-| Role | What they can do |
-|---|---|
-| **Public visitor** | Browse cars, submit enquiries (no login) |
-| **agency_admin** | Manage their agency's cars, enquiries and profile |
-| **super_admin (you)** | All of the above, for any agency, plus create new agencies/admins |
+Update [`src/lib/data/site-data.ts`](src/lib/data/site-data.ts). This file contains the contact details, WhatsApp number, address, vehicle descriptions, rates, and image URLs. Replace the sample agency phone/WhatsApp number and other sample details with Skyline Travels' confirmed details before publishing.
 
-## Quick start
+Vehicle photos are optimized WebP files in `public/cars`; original uploads are preserved in `assets/car-image-sources`. Sharp is installed for conversion. To regenerate the WebP files after updating the source images and mappings, run `npm run images:convert`.
 
-1. Copy env file and fill in Supabase keys:
-   ```powershell
-   Copy-Item .env.example .env.local
-   ```
-2. Install deps & run dev server:
-   ```powershell
-   npm install
-   npm run dev
-   ```
+Enquiries are handed off to WhatsApp and are not saved by the website. The customer must press Send in WhatsApp to deliver the message.
 
-See [SETUP.md](SETUP.md) for the full step-by-step guide (Supabase project, schema, super-admin bootstrap, VAPID keys, Vercel deploy, custom domain).
+## Deploy to Vercel
+
+Import this repository into Vercel and deploy with the detected Next.js settings. No environment variables are required. `NEXT_PUBLIC_ENABLE_DATABASE` defaults to `false`; it can also be set explicitly to `false` in Vercel.
+
+Admin login, database enquiry storage, image uploads, and push notifications are not active in this standalone version. Re-enabling them later requires setting the flag to `true` and configuring the matching Supabase project and schema.

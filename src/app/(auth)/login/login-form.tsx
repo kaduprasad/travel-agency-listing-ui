@@ -27,15 +27,16 @@ export function LoginForm() {
     <form action={formAction} className="space-y-4">
       <input type="hidden" name="redirectTo" value={redirectTo} />
       <div className="space-y-2">
-        <Label htmlFor="email" className="text-white/80">Email</Label>
+        <Label htmlFor="identifier" className="text-white/80">Mobile number or Email</Label>
         <Input
-          id="email"
-          name="email"
-          type="email"
+          id="identifier"
+          name="identifier"
+          type="text"
           required
-          autoComplete="email"
+          autoComplete="username"
+          inputMode="email"
           className="bg-white/5 border-white/10 text-white placeholder:text-white/30"
-          placeholder="admin@skylinetravels.example"
+          placeholder="9876543210 or admin@example.com"
         />
       </div>
       <div className="space-y-2">

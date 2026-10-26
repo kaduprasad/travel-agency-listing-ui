@@ -3,7 +3,7 @@ import dynamic from "next/dynamic";
 import * as React from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { ArrowRight, Phone, ShieldCheck, Sparkles } from "lucide-react";
+import { ArrowRight, Phone, ShieldCheck, Clock4, Sparkles, MapPin } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 const Hero3D = dynamic(() => import("./hero-3d"), { ssr: false, loading: () => null });
@@ -15,94 +15,86 @@ interface HeroProps {
 }
 
 export function Hero({ agencyName, tagline, phone }: HeroProps) {
-  const [render3D, setRender3D] = React.useState(false);
-
-  React.useEffect(() => {
-    // Skip 3D on small screens / reduced-motion / slow connections
-    const motionOk = !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const widthOk = window.innerWidth >= 768;
-    const conn = (navigator as Navigator & { connection?: { saveData?: boolean; effectiveType?: string } }).connection;
-    const connOk = !conn || (!conn.saveData && conn.effectiveType !== "slow-2g" && conn.effectiveType !== "2g");
-    if (motionOk && widthOk && connOk) setRender3D(true);
-  }, []);
-
   return (
-    <section className="relative isolate overflow-hidden bg-gradient-to-br from-slate-950 via-brand-900 to-slate-950 text-white">
-      <div className="absolute inset-0 bg-grid opacity-25" aria-hidden />
-      <div className="absolute -top-32 -right-32 h-[28rem] w-[28rem] rounded-full bg-brand-500/30 blur-3xl" aria-hidden />
-      <div className="absolute -bottom-40 -left-32 h-[26rem] w-[26rem] rounded-full bg-brand-700/30 blur-3xl" aria-hidden />
+    <section className="relative isolate overflow-hidden bg-slate-950 text-white">
+      <div className="absolute inset-0">
+        <Hero3D />
+      </div>
 
-      <div className="relative">
-        {render3D && (
-          <div className="absolute inset-0" aria-hidden>
-            <Hero3D />
-          </div>
-        )}
+      <div className="absolute inset-0 bg-gradient-to-b from-slate-950/70 via-slate-950/50 to-slate-950/90" aria-hidden />
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-background to-transparent" aria-hidden />
 
-        <div className="container relative grid gap-12 py-20 lg:grid-cols-2 lg:gap-8 lg:py-28">
-          <div className="relative z-10 max-w-xl">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5 }}
-              className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/5 px-3 py-1 text-xs font-medium backdrop-blur"
-            >
-              <Sparkles className="h-3.5 w-3.5 text-brand-200" /> Premium car rentals · Pune & beyond
-            </motion.div>
-            <motion.h1
-              initial={{ opacity: 0, y: 24 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.05 }}
-              className="mt-5 font-display text-4xl font-bold leading-tight text-balance sm:text-5xl lg:text-6xl"
-            >
-              Comfortable rides,{" "}
-              <span className="bg-gradient-to-r from-brand-200 via-white to-brand-300 bg-clip-text text-transparent">
-                transparent pricing
-              </span>
-            </motion.h1>
-            <motion.p
-              initial={{ opacity: 0, y: 24 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.15 }}
-              className="mt-5 text-lg text-white/75"
-            >
-              {tagline ?? `Book ${agencyName} for local, intercity, airport pickup, and holiday packages with per-km clarity and clean, well-maintained vehicles.`}
-            </motion.p>
-            <motion.div
-              initial={{ opacity: 0, y: 24 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.25 }}
-              className="mt-8 flex flex-wrap gap-3"
-            >
-              <Button asChild size="lg" variant="gradient">
-                <Link href="/cars">
-                  Explore our fleet <ArrowRight className="h-4 w-4" />
-                </Link>
-              </Button>
-              {phone && (
-                <Button asChild size="lg" variant="outline" className="border-white/30 bg-white/5 text-white hover:bg-white/10 hover:text-white">
-                  <a href={`tel:${phone.replace(/\s+/g, "")}`}>
-                    <Phone className="h-4 w-4" /> {phone}
-                  </a>
-                </Button>
-              )}
-            </motion.div>
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.6, delay: 0.4 }}
-              className="mt-10 flex flex-wrap items-center gap-x-6 gap-y-3 text-sm text-white/70"
-            >
-              <div className="flex items-center gap-2"><ShieldCheck className="h-4 w-4 text-brand-200" /> Verified drivers</div>
-              <div className="flex items-center gap-2"><ShieldCheck className="h-4 w-4 text-brand-200" /> 24×7 support</div>
-              <div className="flex items-center gap-2"><ShieldCheck className="h-4 w-4 text-brand-200" /> No hidden charges</div>
-            </motion.div>
-          </div>
+      <div className="container relative z-10 flex min-h-[88vh] flex-col items-center justify-center py-24 text-center lg:min-h-[92vh] lg:py-28">
+        <motion.div
+          initial={{ opacity: 0, y: 14 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/5 px-4 py-1.5 text-xs font-medium uppercase tracking-wider backdrop-blur"
+        >
+          <Sparkles className="h-3.5 w-3.5 text-brand-200" /> Premium car rentals
+          <span className="hidden h-3 w-px bg-white/30 sm:inline-block" />
+          <span className="hidden items-center gap-1 sm:inline-flex">
+            <MapPin className="h-3.5 w-3.5 text-brand-200" /> Pune &amp; beyond
+          </span>
+        </motion.div>
 
-          {/* Right side reserved for the 3D scene on lg+ */}
-          <div className="hidden lg:block" />
-        </div>
+        <motion.h1
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7, delay: 0.05 }}
+          className="mt-6 font-display text-5xl font-extrabold leading-[0.95] tracking-tight sm:text-7xl lg:text-8xl xl:text-[8.5rem]"
+        >
+          <span className="block bg-gradient-to-b from-white via-white to-brand-300 bg-clip-text text-transparent drop-shadow-[0_2px_30px_rgba(58,125,255,0.25)]">
+            {agencyName}
+          </span>
+        </motion.h1>
+
+        <motion.p
+          initial={{ opacity: 0, y: 24 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.2 }}
+          className="mt-6 max-w-2xl text-balance text-lg text-white/85 sm:text-xl"
+        >
+          {tagline ?? "Comfortable rides, transparent pricing — for every journey."}
+        </motion.p>
+
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.3 }}
+          className="mt-10 flex flex-wrap items-center justify-center gap-3"
+        >
+          <Button asChild size="lg" variant="gradient" className="text-base shadow-lg shadow-brand-500/30">
+            <Link href="/cars">
+              Explore our fleet <ArrowRight className="h-4 w-4" />
+            </Link>
+          </Button>
+          {phone && (
+            <Button
+              asChild
+              size="lg"
+              variant="outline"
+              className="border-white/30 bg-white/5 text-base text-white backdrop-blur hover:bg-white/15 hover:text-white"
+            >
+              <a href={`tel:${phone.replace(/\s+/g, "")}`}>
+                <Phone className="h-4 w-4" /> {phone}
+              </a>
+            </Button>
+          )}
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.6, delay: 0.5 }}
+          className="mt-14 flex flex-wrap items-center justify-center gap-x-8 gap-y-3 text-sm text-white/75"
+        >
+          <div className="flex items-center gap-2"><ShieldCheck className="h-4 w-4 text-brand-200" /> Verified drivers</div>
+          <div className="flex items-center gap-2"><Clock4 className="h-4 w-4 text-brand-200" /> 24×7 support</div>
+          <div className="flex items-center gap-2"><ShieldCheck className="h-4 w-4 text-brand-200" /> No hidden charges</div>
+        </motion.div>
       </div>
     </section>
   );
 }
+

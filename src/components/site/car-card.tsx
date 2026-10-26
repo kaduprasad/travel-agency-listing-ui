@@ -2,8 +2,8 @@
 import * as React from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
-import { Car as CarIcon, Fuel, Users, Snowflake, Settings, ImageIcon } from "lucide-react";
-import type { Car } from "@/lib/database.types";
+import { Car as CarIcon, ChevronLeft, ChevronRight, Fuel, Users, Snowflake, Settings, ImageIcon } from "lucide-react";
+import type { Car } from "@/lib/data/site-data";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { formatINR } from "@/lib/utils";
@@ -14,9 +14,74 @@ interface CarCardProps {
   index?: number;
 }
 
+function ImageGallery({ images, model }: { images: string[]; model: string }) {
+  const [idx, setIdx] = React.useState(0);
+  const total = images.length;
+
+  // Auto-advance every 3 s when multiple images
+  React.useEffect(() => {
+    if (total <= 1) return;
+    const id = setInterval(() => setIdx((i) => (i + 1) % total), 3000);
+    return () => clearInterval(id);
+  }, [total]);
+
+  if (total === 0) {
+    return (
+      <div className="flex h-full items-center justify-center text-muted-foreground">
+        <ImageIcon className="h-10 w-10" />
+      </div>
+    );
+  }
+
+  return (
+    <div className="relative h-full w-full">
+      {images.map((src, i) => (
+        <Image
+          key={src}
+          src={src}
+          alt={`${model} photo ${i + 1}`}
+          fill
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+          className={`object-cover transition-opacity duration-700 ${i === idx ? "opacity-100" : "opacity-0"}`}
+          priority={i === 0}
+        />
+      ))}
+
+      {total > 1 && (
+        <>
+          <button
+            className="absolute left-2 top-1/2 z-10 -translate-y-1/2 rounded-full bg-black/40 p-1 text-white hover:bg-black/70"
+            onClick={(e) => { e.stopPropagation(); setIdx((i) => (i - 1 + total) % total); }}
+            aria-label="Previous image"
+          >
+            <ChevronLeft className="h-4 w-4" />
+          </button>
+          <button
+            className="absolute right-2 top-1/2 z-10 -translate-y-1/2 rounded-full bg-black/40 p-1 text-white hover:bg-black/70"
+            onClick={(e) => { e.stopPropagation(); setIdx((i) => (i + 1) % total); }}
+            aria-label="Next image"
+          >
+            <ChevronRight className="h-4 w-4" />
+          </button>
+          <div className="absolute bottom-2 left-1/2 z-10 flex -translate-x-1/2 gap-1">
+            {images.map((_, i) => (
+              <button
+                key={i}
+                onClick={(e) => { e.stopPropagation(); setIdx(i); }}
+                aria-label={`Go to image ${i + 1}`}
+                className={`h-1.5 rounded-full transition-all ${i === idx ? "w-4 bg-white" : "w-1.5 bg-white/50"}`}
+              />
+            ))}
+          </div>
+        </>
+      )}
+    </div>
+  );
+}
+
 export function CarCard({ car, index = 0 }: CarCardProps) {
   const [enquiryOpen, setEnquiryOpen] = React.useState(false);
-  const cover = car.primary_image ?? car.images[0] ?? null;
+  const images = car.images?.length ? car.images : car.primary_image ? [car.primary_image] : [];
 
   return (
     <>
@@ -28,23 +93,14 @@ export function CarCard({ car, index = 0 }: CarCardProps) {
         className="group flex flex-col overflow-hidden rounded-2xl border bg-card shadow-sm transition-shadow hover:shadow-lg"
       >
         <div className="relative aspect-[16/10] overflow-hidden bg-muted">
-          {cover ? (
-            <Image
-              src={cover}
-              alt={car.model}
-              fill
-              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-              className="object-cover transition-transform duration-500 group-hover:scale-105"
-            />
-          ) : (
-            <div className="flex h-full items-center justify-center text-muted-foreground">
-              <ImageIcon className="h-10 w-10" />
-            </div>
-          )}
-          <div className="absolute left-3 top-3 flex gap-2">
+          <ImageGallery images={images} model={car.model} />
+          <div className="absolute left-3 top-3 z-10 flex gap-2">
             <Badge variant="info" className="shadow">
               <CarIcon className="mr-1 h-3 w-3" /> {car.category}
             </Badge>
+            {images.length > 1 && (
+              <Badge variant="secondary" className="shadow">{images.length} photos</Badge>
+            )}
           </div>
         </div>
 

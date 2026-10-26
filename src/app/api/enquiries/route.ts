@@ -3,11 +3,15 @@ import { createClient, createServiceRoleClient } from "@/lib/supabase/server";
 import { enquirySchema } from "@/lib/validation/enquiry";
 import { getAgencyBySlug } from "@/lib/data/agency";
 import { DEFAULT_AGENCY_SLUG } from "@/lib/constants";
+import { DATABASE_ENABLED } from "@/lib/constants";
 import { sendPushToAgency } from "@/lib/push/send";
 
 export const runtime = "nodejs";
 
 export async function POST(request: NextRequest) {
+  if (!DATABASE_ENABLED) {
+    return NextResponse.json({ ok: false, error: "Database enquiries are disabled. Use the WhatsApp enquiry form." }, { status: 503 });
+  }
   let body: unknown;
   try { body = await request.json(); } catch { return NextResponse.json({ ok: false, error: "Invalid JSON" }, { status: 400 }); }
 

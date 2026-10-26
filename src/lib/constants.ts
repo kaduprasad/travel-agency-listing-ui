@@ -5,6 +5,8 @@ export const SITE_DESCRIPTION =
 export const DEFAULT_AGENCY_SLUG =
   process.env.NEXT_PUBLIC_DEFAULT_AGENCY_SLUG ?? "skyline-travels";
 
+export const DATABASE_ENABLED = process.env.NEXT_PUBLIC_ENABLE_DATABASE === "true";
+
 export const TRAVEL_TYPES = [
   { value: "local", label: "Local", icon: "MapPin", description: "Within-city trips, hourly or per km" },
   { value: "intercity", label: "Inter City", icon: "Route", description: "Outstation round-trip or one-way" },

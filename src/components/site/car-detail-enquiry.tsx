@@ -2,7 +2,7 @@
 import * as React from "react";
 import { Button } from "@/components/ui/button";
 import { EnquiryDialog } from "@/components/site/enquiry-dialog";
-import type { Car } from "@/lib/database.types";
+import type { Car } from "@/lib/data/site-data";
 
 export function CarDetailEnquiry({ car }: { car: Car }) {
   const [open, setOpen] = React.useState(false);

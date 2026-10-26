@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { Mail, MapPin, Phone } from "lucide-react";
-import type { Agency } from "@/lib/database.types";
+import type { Agency } from "@/lib/data/site-data";
 
 export function SiteFooter({ agency }: { agency: Agency }) {
   const address = agency.address as { line1?: string; line2?: string; city?: string; state?: string; zip?: string } | null;
@@ -52,10 +52,7 @@ export function SiteFooter({ agency }: { agency: Agency }) {
       <div className="border-t">
         <div className="container flex flex-col gap-2 py-4 text-xs text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
           <p>© {new Date().getFullYear()} {agency.name}. All rights reserved.</p>
-          <p>
-            Built with Next.js · Powered by Supabase ·{" "}
-            <Link href="/login" className="underline-offset-2 hover:underline">Admin</Link>
-          </p>
+          <p>Local car rentals · Pune, Maharashtra</p>
         </div>
       </div>
     </footer>

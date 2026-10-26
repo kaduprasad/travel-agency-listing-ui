@@ -3,7 +3,7 @@ import { ArrowRight, BadgeCheck, Clock4, MapPin, Phone, Plane, Gift, Route, Spar
 import { Hero } from "@/components/site/hero";
 import { CarCard } from "@/components/site/car-card";
 import { Button } from "@/components/ui/button";
-import { getAgencyOrNotFound, getAgencyCars } from "@/lib/data/agency";
+import { AGENCY, CARS } from "@/lib/data/site-data";
 
 const SERVICES = [
   { icon: MapPin, title: "Local Trips", description: "Within-city hourly or per-km bookings for errands, events, weddings." },
@@ -18,10 +18,9 @@ const WHY = [
   { icon: Sparkles, title: "Clean Vehicles", description: "Regularly serviced, sanitised and ready for your journey." },
 ];
 
-export default async function HomePage() {
-  const agency = await getAgencyOrNotFound();
-  const cars = await getAgencyCars(agency.id);
-  const featured = cars.slice(0, 4);
+export default function HomePage() {
+  const agency = AGENCY;
+  const featured = CARS.slice(0, 4);
 
   return (
     <>
@@ -61,15 +60,9 @@ export default async function HomePage() {
             </Button>
           </div>
 
-          {featured.length === 0 ? (
-            <div className="mt-10 rounded-xl border border-dashed bg-card p-10 text-center text-muted-foreground">
-              No cars listed yet. The admin can add cars from the dashboard.
-            </div>
-          ) : (
-            <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-              {featured.map((car, i) => <CarCard key={car.id} car={car} index={i} />)}
-            </div>
-          )}
+          <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+            {featured.map((car, i) => <CarCard key={car.id} car={car} index={i} />)}
+          </div>
         </div>
       </section>
 

@@ -5,13 +5,17 @@ import { ArrowLeft, Car as CarIcon, Fuel, ImageIcon, Snowflake, Settings, Users 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { CarDetailEnquiry } from "@/components/site/car-detail-enquiry";
-import { getAgencyOrNotFound, getCarById } from "@/lib/data/agency";
+import { AGENCY, CARS } from "@/lib/data/site-data";
 import { formatINR } from "@/lib/utils";
+
+export function generateStaticParams() {
+  return CARS.map((car) => ({ id: car.id }));
+}
 
 export default async function CarDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
-  const agency = await getAgencyOrNotFound();
-  const car = await getCarById(agency.id, id);
+  const agency = AGENCY;
+  const car = CARS.find((item) => item.id === id);
   if (!car) notFound();
 
   const cover = car.primary_image ?? car.images[0] ?? null;

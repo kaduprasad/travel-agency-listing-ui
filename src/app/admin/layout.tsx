@@ -2,10 +2,13 @@ import { redirect } from "next/navigation";
 import { AdminShell } from "@/components/admin/admin-shell";
 import { getSessionProfile } from "@/lib/data/session";
 import { getAgencyBySlug } from "@/lib/data/agency";
+import { DATABASE_ENABLED } from "@/lib/constants";
 
 export const metadata = { title: "Admin" };
+export const dynamic = "force-dynamic";
 
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
+  if (!DATABASE_ENABLED) redirect("/");
   const { user, profile } = await getSessionProfile();
   if (!user || !profile) redirect("/login");
 
