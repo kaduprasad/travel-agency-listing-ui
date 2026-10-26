@@ -270,9 +270,9 @@ values (
   'Skyline Travels',
   'Comfortable rides for every journey',
   'Skyline Travels offers reliable local, intercity, airport pickup and holiday car rental services in Pune with transparent per-km pricing and well-maintained vehicles.',
-  '+91 98765 43210',
+  '+91 89995 18604',
   'hello@skylinetravels.example',
-  '+919876543210',
+  '+918999518604',
   jsonb_build_object(
     'line1', '12 MG Road',
     'line2', 'Near Central Mall',

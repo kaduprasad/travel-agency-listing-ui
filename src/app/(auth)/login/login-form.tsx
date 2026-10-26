@@ -36,7 +36,7 @@ export function LoginForm() {
           autoComplete="username"
           inputMode="email"
           className="bg-white/5 border-white/10 text-white placeholder:text-white/30"
-          placeholder="9876543210 or admin@example.com"
+          placeholder="8999518604 or admin@example.com"
         />
       </div>
       <div className="space-y-2">

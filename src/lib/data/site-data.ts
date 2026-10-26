@@ -40,8 +40,8 @@ export const AGENCY: Agency = {
   tagline: "Comfortable rides for every journey",
   description:
     "Skyline Travels offers reliable local, intercity, airport pickup and holiday car rental services in Pune. Choose a vehicle, check the rates, and send your trip details directly to our team.",
-  phone: "+91 98765 43210",
-  whatsapp: "919876543210",
+  phone: "+91 89995 18604",
+  whatsapp: "918999518604",
   email: "hello@skylinetravels.example",
   address: {
     line1: "12 MG Road",

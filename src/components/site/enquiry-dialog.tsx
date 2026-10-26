@@ -90,7 +90,7 @@ export function EnquiryDialog({ open, onOpenChange, car = null, defaultTravelTyp
         <form ref={formRef} onSubmit={onSubmit} className="mt-4 grid gap-4">
           <div className="grid gap-4 sm:grid-cols-2">
             <Field id="full_name" label="Full Name" required placeholder="Your name" />
-            <Field id="phone" label="Contact Number" required type="tel" placeholder="+91 98765 43210" inputMode="tel" />
+            <Field id="phone" label="Contact Number" required type="tel" placeholder="+91 89995 18604" inputMode="tel" />
           </div>
           <Field id="email" label="Email (optional)" type="email" placeholder="you@example.com" />
 
