@@ -5,7 +5,7 @@ A mobile-first car rental website for Skyline Travels. It runs on Next.js and de
 ## Included
 
 - Public home, fleet, car detail, about, and contact pages
-- Four sample vehicles with rates, seating, features, and photo galleries
+- Cars and AC/non-AC buses with rates where available and photo galleries
 - Responsive layout and animated landing page
 - Enquiry form that opens WhatsApp with the trip details prefilled
 - Database-backed admin and API code retained but disabled by default
@@ -19,11 +19,13 @@ npm run dev
 
 Open http://localhost:3000.
 
-## Edit agency and car details
+## Edit agency, vehicle details, and rates
 
-Update [`src/lib/data/site-data.ts`](src/lib/data/site-data.ts). This file contains the contact details, WhatsApp number, address, vehicle descriptions, rates, and image URLs. Replace the sample agency phone/WhatsApp number and other sample details with Skyline Travels' confirmed details before publishing.
+Update [`src/lib/data/site-data.ts`](src/lib/data/site-data.ts) for contact details, vehicle descriptions, and image URLs. Replace the sample agency phone/WhatsApp number and other sample details with Skyline Travels' confirmed details before publishing.
 
-Vehicle photos are optimized WebP files in `public/cars`; original uploads are preserved in `assets/car-image-sources`. Sharp is installed for conversion. To regenerate the WebP files after updating the source images and mappings, run `npm run images:convert`.
+All public vehicle rates are configured in [`src/lib/data/vehicle-rates.ts`](src/lib/data/vehicle-rates.ts), keyed by vehicle ID. `localPerKm` and `outstationPerKm` are prices in rupees per kilometre; `package` specifies the distance and total price. Optional `airportFlat`, `driverPerDay`, and `minKmPerDay` fields can also be added. Omit a field to hide it, or leave a vehicle's rates empty to show "Contact us for a quote". Redeploy after editing.
+
+Vehicle photos are stored in `public/cars`. Add bus photos there when available, then set the bus `images` and `primary_image` paths in `site-data.ts`.
 
 Enquiries are handed off to WhatsApp and are not saved by the website. The customer must press Send in WhatsApp to deliver the message.
 

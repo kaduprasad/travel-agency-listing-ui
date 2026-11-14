@@ -2,7 +2,7 @@
 import * as React from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
-import { Car as CarIcon, ChevronLeft, ChevronRight, Fuel, Users, Snowflake, Settings, ImageIcon } from "lucide-react";
+import { Bus, Car as CarIcon, ChevronLeft, ChevronRight, Fuel, Users, Snowflake, Settings, ImageIcon } from "lucide-react";
 import type { Car } from "@/lib/data/site-data";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -27,8 +27,9 @@ function ImageGallery({ images, model }: { images: string[]; model: string }) {
 
   if (total === 0) {
     return (
-      <div className="flex h-full items-center justify-center text-muted-foreground">
+      <div className="flex h-full flex-col items-center justify-center gap-2 text-muted-foreground">
         <ImageIcon className="h-10 w-10" />
+        <span className="text-sm">Photos coming soon</span>
       </div>
     );
   }
@@ -41,7 +42,7 @@ function ImageGallery({ images, model }: { images: string[]; model: string }) {
           src={src}
           alt={`${model} photo ${i + 1}`}
           fill
-          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+          sizes="(max-width: 639px) 100vw, (max-width: 1023px) 50vw, (max-width: 1279px) 33vw, 20vw"
           className={`object-cover transition-opacity duration-700 ${i === idx ? "opacity-100" : "opacity-0"}`}
           priority={i === 0}
         />
@@ -82,6 +83,9 @@ function ImageGallery({ images, model }: { images: string[]; model: string }) {
 export function CarCard({ car, index = 0 }: CarCardProps) {
   const [enquiryOpen, setEnquiryOpen] = React.useState(false);
   const images = car.images?.length ? car.images : car.primary_image ? [car.primary_image] : [];
+  const rates = car.rates;
+  const hasRates = rates.localPerKm != null || rates.outstationPerKm != null || rates.airportFlat != null || rates.package != null;
+  const CategoryIcon = car.category === "Bus" ? Bus : CarIcon;
 
   return (
     <>
@@ -96,7 +100,7 @@ export function CarCard({ car, index = 0 }: CarCardProps) {
           <ImageGallery images={images} model={car.model} />
           <div className="absolute left-3 top-3 z-10 flex gap-2">
             <Badge variant="info" className="shadow">
-              <CarIcon className="mr-1 h-3 w-3" /> {car.category}
+              <CategoryIcon className="mr-1 h-3 w-3" /> {car.category}
             </Badge>
             {images.length > 1 && (
               <Badge variant="secondary" className="shadow">{images.length} photos</Badge>
@@ -108,40 +112,41 @@ export function CarCard({ car, index = 0 }: CarCardProps) {
           <h3 className="font-display text-lg font-semibold leading-tight">{car.model}</h3>
 
           <div className="mt-3 grid grid-cols-2 gap-x-3 gap-y-2 text-sm text-muted-foreground">
-            <div className="flex items-center gap-1.5"><Users className="h-4 w-4" /> {car.seats} seats</div>
+            {car.seats != null && <div className="flex items-center gap-1.5"><Users className="h-4 w-4" /> {car.seats} seats</div>}
             {car.transmission && <div className="flex items-center gap-1.5"><Settings className="h-4 w-4" /> {car.transmission}</div>}
             {car.fuel_type && <div className="flex items-center gap-1.5"><Fuel className="h-4 w-4" /> {car.fuel_type}</div>}
             {car.ac && <div className="flex items-center gap-1.5"><Snowflake className="h-4 w-4" /> AC</div>}
           </div>
 
           <div className="mt-4 grid grid-cols-2 gap-2 rounded-lg bg-muted/40 p-3 text-xs">
-            {car.local_rate_per_km != null && (
+            {rates.localPerKm != null && (
               <div>
                 <div className="text-muted-foreground">Local</div>
-                <div className="font-semibold text-foreground">{formatINR(car.local_rate_per_km)}/km</div>
+                <div className="font-semibold text-foreground">{formatINR(rates.localPerKm)}/km</div>
               </div>
             )}
-            {car.intercity_rate_per_km != null && (
+            {rates.outstationPerKm != null && (
               <div>
-                <div className="text-muted-foreground">Intercity</div>
-                <div className="font-semibold text-foreground">{formatINR(car.intercity_rate_per_km)}/km</div>
+                <div className="text-muted-foreground">Outstation</div>
+                <div className="font-semibold text-foreground">{formatINR(rates.outstationPerKm)}/km</div>
               </div>
             )}
-            {car.airport_flat_rate != null && (
+            {rates.airportFlat != null && (
               <div>
                 <div className="text-muted-foreground">Airport flat</div>
-                <div className="font-semibold text-foreground">{formatINR(car.airport_flat_rate)}</div>
+                <div className="font-semibold text-foreground">{formatINR(rates.airportFlat)}</div>
               </div>
             )}
-            {car.package_total != null && car.package_km && (
+            {rates.package != null && (
               <div>
-                <div className="text-muted-foreground">Package · {car.package_km}km</div>
-                <div className="font-semibold text-foreground">{formatINR(car.package_total)}</div>
+                <div className="text-muted-foreground">Package · {rates.package.km} km</div>
+                <div className="font-semibold text-foreground">{formatINR(rates.package.total)}</div>
               </div>
             )}
+            {!hasRates && <div className="col-span-2 text-muted-foreground">Contact us for a quote</div>}
           </div>
 
-          <div className="mt-5 flex items-center justify-between gap-2">
+          <div className="mt-auto flex items-center justify-between gap-2 pt-5">
             <Button asChild variant="ghost" size="sm">
               <a href={`/cars/${car.id}`}>View details</a>
             </Button>

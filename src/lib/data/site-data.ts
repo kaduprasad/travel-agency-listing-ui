@@ -1,3 +1,5 @@
+import { VEHICLE_RATES, type VehicleId, type VehicleRates } from "@/lib/data/vehicle-rates";
+
 export interface Agency {
   name: string;
   tagline: string;
@@ -5,54 +7,36 @@ export interface Agency {
   phone: string;
   whatsapp: string;
   email: string;
-  address: {
-    line1: string;
-    line2: string;
-    city: string;
-    state: string;
-    zip: string;
-  };
+  address: string;
 }
 
 export interface Car {
-  id: string;
+  id: VehicleId;
   model: string;
   category: string;
-  seats: number;
-  luggage: number;
-  ac: boolean;
-  transmission: "manual" | "automatic";
-  fuel_type: string;
-  local_rate_per_km: number | null;
-  intercity_rate_per_km: number | null;
-  airport_flat_rate: number | null;
-  package_km: number | null;
-  package_total: number | null;
-  min_km_per_day: number | null;
-  driver_charge_per_day: number | null;
+  seats: number | null;
+  luggage: number | null;
+  ac: boolean | null;
+  transmission: "manual" | "automatic" | null;
+  fuel_type: string | null;
+  rates: VehicleRates;
   features: string[];
   images: string[];
-  primary_image: string;
+  primary_image: string | null;
 }
 
 export const AGENCY: Agency = {
   name: "Skyline Travels",
   tagline: "Comfortable rides for every journey",
   description:
-    "Skyline Travels offers reliable local, intercity, airport pickup and holiday car rental services in Pune. Choose a vehicle, check the rates, and send your trip details directly to our team.",
+    "Skyline Travels offers reliable local, intercity, airport pickup and holiday car and bus rental services in Pune. Choose a vehicle, check available rates, and send your trip details directly to our team.",
   phone: "+91 89995 18604",
   whatsapp: "918999518604",
-  email: "hello@skylinetravels.example",
-  address: {
-    line1: "12 MG Road",
-    line2: "Near Central Mall",
-    city: "Pune",
-    state: "Maharashtra",
-    zip: "411001",
-  },
+  email: "mkshirsagar878@gmail.com",
+  address: "Sai Vihar Colony, Kalepadal, Hadapsar, Pune 28",
 };
 
-export const CARS: Car[] = [
+const VEHICLES: Omit<Car, "rates">[] = [
   {
     id: "maruti-suzuki-dzire",
     model: "Maruti Suzuki Dzire",
@@ -62,13 +46,6 @@ export const CARS: Car[] = [
     ac: true,
     transmission: "manual",
     fuel_type: "Petrol",
-    local_rate_per_km: 12,
-    intercity_rate_per_km: 11,
-    airport_flat_rate: 1200,
-    package_km: 300,
-    package_total: 5000,
-    min_km_per_day: 250,
-    driver_charge_per_day: 300,
     features: ["Music System", "Charging Port", "First Aid"],
     images: [
       "/cars/maruti-suzuki-dzire-tour-exterior.webp",
@@ -85,13 +62,6 @@ export const CARS: Car[] = [
     ac: true,
     transmission: "manual",
     fuel_type: "Diesel",
-    local_rate_per_km: 18,
-    intercity_rate_per_km: 17,
-    airport_flat_rate: 2200,
-    package_km: 300,
-    package_total: 7500,
-    min_km_per_day: 250,
-    driver_charge_per_day: 400,
     features: ["Spacious Cabin", "Music System", "Extra Luggage Space", "Bluetooth"],
     images: [
       "/cars/maruti-ertiga-exterior.webp",
@@ -101,27 +71,20 @@ export const CARS: Car[] = [
     primary_image: "/cars/maruti-ertiga-exterior.webp",
   },
   {
-    id: "maruti-alto",
-    model: "Maruti Suzuki Alto",
-    category: "Hatchback",
-    seats: 5,
-    luggage: 2,
-    ac: true,
-    transmission: "manual",
-    fuel_type: "Petrol",
-    local_rate_per_km: 10,
-    intercity_rate_per_km: 10,
-    airport_flat_rate: 1000,
-    package_km: 300,
-    package_total: 4500,
-    min_km_per_day: 250,
-    driver_charge_per_day: 300,
-    features: ["Compact City Ride", "Music System", "Charging Port"],
+    id: "toyota-innova-crysta",
+    model: "Toyota Innova Crysta",
+    category: "MUV",
+    seats: null,
+    luggage: null,
+    ac: null,
+    transmission: null,
+    fuel_type: null,
+    features: [],
     images: [
-      "/cars/maruti-alto.webp",
-      "/cars/maruti-alto-alt2.webp",
+      "/cars/innova-1.png",
+      "/cars/innova-back.png",
     ],
-    primary_image: "/cars/maruti-alto.webp",
+    primary_image: "/cars/innova-1.png",
   },
   {
     id: "chevrolet-enjoy",
@@ -132,13 +95,6 @@ export const CARS: Car[] = [
     ac: true,
     transmission: "manual",
     fuel_type: "Diesel",
-    local_rate_per_km: 28,
-    intercity_rate_per_km: 26,
-    airport_flat_rate: null,
-    package_km: 300,
-    package_total: 12000,
-    min_km_per_day: 250,
-    driver_charge_per_day: 600,
     features: ["Spacious Cabin", "Music System", "Charging Ports"],
     images: [
       "/cars/chevrolet-enjoy-exterior.webp",
@@ -146,4 +102,25 @@ export const CARS: Car[] = [
     ],
     primary_image: "/cars/chevrolet-enjoy-exterior.webp",
   },
+  {
+    id: "buses",
+    model: "Buses (AC / Non-AC)",
+    category: "Bus",
+    seats: null,
+    luggage: null,
+    ac: null,
+    transmission: null,
+    fuel_type: null,
+    features: ["AC buses", "Non-AC buses"],
+    images: [
+      "/cars/Bus-1.jpeg",
+      "/cars/Bus-2.jpeg",
+    ],
+    primary_image: "/cars/Bus-1.jpeg",
+  },
 ];
+
+export const CARS: Car[] = VEHICLES.map((vehicle) => ({
+  ...vehicle,
+  rates: VEHICLE_RATES[vehicle.id],
+}));

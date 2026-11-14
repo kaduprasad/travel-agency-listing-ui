@@ -20,7 +20,7 @@ const WHY = [
 
 export default function HomePage() {
   const agency = AGENCY;
-  const featured = CARS.slice(0, 4);
+  const featured = CARS.slice(0, 5);
 
   return (
     <>
@@ -53,14 +53,14 @@ export default function HomePage() {
             <div>
               <p className="text-sm font-semibold uppercase tracking-wider text-brand-600">Featured fleet</p>
               <h2 className="mt-2 font-display text-3xl font-bold sm:text-4xl">Pick your ride</h2>
-              <p className="mt-2 max-w-xl text-muted-foreground">Sedans for city runs, SUVs for family trips, and tempo travellers for groups.</p>
+              <p className="mt-2 max-w-xl text-muted-foreground">Sedans for city runs, MUVs for family trips, and buses for groups.</p>
             </div>
             <Button asChild variant="outline">
               <Link href="/cars">View entire fleet <ArrowRight className="h-4 w-4" /></Link>
             </Button>
           </div>
 
-          <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
             {featured.map((car, i) => <CarCard key={car.id} car={car} index={i} />)}
           </div>
         </div>

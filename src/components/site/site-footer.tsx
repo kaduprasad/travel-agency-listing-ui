@@ -3,7 +3,6 @@ import { Mail, MapPin, Phone } from "lucide-react";
 import type { Agency } from "@/lib/data/site-data";
 
 export function SiteFooter({ agency }: { agency: Agency }) {
-  const address = agency.address as { line1?: string; line2?: string; city?: string; state?: string; zip?: string } | null;
   return (
     <footer className="border-t bg-muted/30">
       <div className="container grid gap-10 py-12 md:grid-cols-4">
@@ -38,12 +37,10 @@ export function SiteFooter({ agency }: { agency: Agency }) {
                 <a href={`mailto:${agency.email}`} className="hover:text-foreground">{agency.email}</a>
               </li>
             )}
-            {address && (
+            {agency.address && (
               <li className="flex gap-2">
                 <MapPin className="h-4 w-4 shrink-0 mt-0.5" />
-                <span>
-                  {[address.line1, address.line2, address.city, address.state, address.zip].filter(Boolean).join(", ")}
-                </span>
+                <span>{agency.address}</span>
               </li>
             )}
           </ul>

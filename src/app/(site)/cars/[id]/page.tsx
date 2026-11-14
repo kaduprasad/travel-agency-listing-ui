@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowLeft, Car as CarIcon, Fuel, ImageIcon, Snowflake, Settings, Users } from "lucide-react";
+import { ArrowLeft, Bus, Car as CarIcon, Fuel, ImageIcon, Snowflake, Settings, Users } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { CarDetailEnquiry } from "@/components/site/car-detail-enquiry";
@@ -20,6 +20,10 @@ export default async function CarDetailPage({ params }: { params: Promise<{ id: 
 
   const cover = car.primary_image ?? car.images[0] ?? null;
   const gallery = car.images.length > 0 ? car.images : cover ? [cover] : [];
+  const rates = car.rates;
+  const hasRates = Object.values(rates).some((value) => value != null);
+  const hasDetails = car.seats != null || car.luggage != null || car.ac || car.fuel_type;
+  const CategoryIcon = car.category === "Bus" ? Bus : CarIcon;
 
   return (
     <div className="container py-8 lg:py-12">
@@ -33,7 +37,10 @@ export default async function CarDetailPage({ params }: { params: Promise<{ id: 
             {cover ? (
               <Image src={cover} alt={car.model} fill priority sizes="(max-width: 1024px) 100vw, 60vw" className="object-cover" />
             ) : (
-              <div className="flex h-full items-center justify-center text-muted-foreground"><ImageIcon className="h-12 w-12" /></div>
+              <div className="flex h-full flex-col items-center justify-center gap-2 text-muted-foreground">
+                <ImageIcon className="h-12 w-12" />
+                <span className="text-sm">Photos coming soon</span>
+              </div>
             )}
           </div>
           {gallery.length > 1 && (
@@ -49,41 +56,47 @@ export default async function CarDetailPage({ params }: { params: Promise<{ id: 
 
         <div className="lg:col-span-2">
           <div className="flex items-center gap-2">
-            <Badge variant="info"><CarIcon className="mr-1 h-3 w-3" /> {car.category}</Badge>
+            <Badge variant="info"><CategoryIcon className="mr-1 h-3 w-3" /> {car.category}</Badge>
             {car.transmission && <Badge variant="outline">{car.transmission}</Badge>}
             {car.fuel_type && <Badge variant="outline">{car.fuel_type}</Badge>}
           </div>
           <h1 className="mt-3 font-display text-3xl font-bold">{car.model}</h1>
 
-          <div className="mt-4 grid grid-cols-2 gap-3 rounded-xl border bg-card p-4 text-sm">
-            <div className="flex items-center gap-2"><Users className="h-4 w-4 text-muted-foreground" /> {car.seats} seats</div>
-            {car.luggage != null && <div className="flex items-center gap-2"><Settings className="h-4 w-4 text-muted-foreground" /> {car.luggage} bags</div>}
-            {car.ac && <div className="flex items-center gap-2"><Snowflake className="h-4 w-4 text-muted-foreground" /> AC</div>}
-            {car.fuel_type && <div className="flex items-center gap-2"><Fuel className="h-4 w-4 text-muted-foreground" /> {car.fuel_type}</div>}
-          </div>
+          {hasDetails && (
+            <div className="mt-4 grid grid-cols-2 gap-3 rounded-xl border bg-card p-4 text-sm">
+              {car.seats != null && <div className="flex items-center gap-2"><Users className="h-4 w-4 text-muted-foreground" /> {car.seats} seats</div>}
+              {car.luggage != null && <div className="flex items-center gap-2"><Settings className="h-4 w-4 text-muted-foreground" /> {car.luggage} bags</div>}
+              {car.ac && <div className="flex items-center gap-2"><Snowflake className="h-4 w-4 text-muted-foreground" /> AC</div>}
+              {car.fuel_type && <div className="flex items-center gap-2"><Fuel className="h-4 w-4 text-muted-foreground" /> {car.fuel_type}</div>}
+            </div>
+          )}
 
           <div className="mt-4 rounded-xl border bg-card p-4">
             <h3 className="text-sm font-semibold">Pricing</h3>
-            <dl className="mt-2 grid grid-cols-2 gap-3 text-sm">
-              {car.local_rate_per_km != null && (
-                <div><dt className="text-muted-foreground">Local</dt><dd className="font-semibold">{formatINR(car.local_rate_per_km)}/km</dd></div>
-              )}
-              {car.intercity_rate_per_km != null && (
-                <div><dt className="text-muted-foreground">Intercity</dt><dd className="font-semibold">{formatINR(car.intercity_rate_per_km)}/km</dd></div>
-              )}
-              {car.airport_flat_rate != null && (
-                <div><dt className="text-muted-foreground">Airport flat</dt><dd className="font-semibold">{formatINR(car.airport_flat_rate)}</dd></div>
-              )}
-              {car.package_total != null && car.package_km && (
-                <div><dt className="text-muted-foreground">Package ({car.package_km} km)</dt><dd className="font-semibold">{formatINR(car.package_total)}</dd></div>
-              )}
-              {car.min_km_per_day != null && (
-                <div><dt className="text-muted-foreground">Min km / day</dt><dd className="font-semibold">{car.min_km_per_day} km</dd></div>
-              )}
-              {car.driver_charge_per_day != null && (
-                <div><dt className="text-muted-foreground">Driver / day</dt><dd className="font-semibold">{formatINR(car.driver_charge_per_day)}</dd></div>
-              )}
-            </dl>
+            {hasRates ? (
+              <dl className="mt-2 grid grid-cols-2 gap-3 text-sm">
+                {rates.localPerKm != null && (
+                  <div><dt className="text-muted-foreground">Local</dt><dd className="font-semibold">{formatINR(rates.localPerKm)}/km</dd></div>
+                )}
+                {rates.outstationPerKm != null && (
+                  <div><dt className="text-muted-foreground">Outstation</dt><dd className="font-semibold">{formatINR(rates.outstationPerKm)}/km</dd></div>
+                )}
+                {rates.airportFlat != null && (
+                  <div><dt className="text-muted-foreground">Airport flat</dt><dd className="font-semibold">{formatINR(rates.airportFlat)}</dd></div>
+                )}
+                {rates.package != null && (
+                  <div><dt className="text-muted-foreground">Package ({rates.package.km} km)</dt><dd className="font-semibold">{formatINR(rates.package.total)}</dd></div>
+                )}
+                {rates.minKmPerDay != null && (
+                  <div><dt className="text-muted-foreground">Min km / day</dt><dd className="font-semibold">{rates.minKmPerDay} km</dd></div>
+                )}
+                {rates.driverPerDay != null && (
+                  <div><dt className="text-muted-foreground">Driver / day</dt><dd className="font-semibold">{formatINR(rates.driverPerDay)}</dd></div>
+                )}
+              </dl>
+            ) : (
+              <p className="mt-2 text-sm text-muted-foreground">Contact us for a quote</p>
+            )}
           </div>
 
           {car.features && car.features.length > 0 && (

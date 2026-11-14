@@ -5,7 +5,7 @@ export const metadata = { title: "Contact" };
 
 export default function ContactPage() {
   const agency = AGENCY;
-  const fullAddress = [agency.address.line1, agency.address.line2, agency.address.city, agency.address.state, agency.address.zip].filter(Boolean).join(", ");
+  const fullAddress = agency.address;
 
   return (
     <div className="container py-12 lg:py-16 max-w-3xl">

@@ -11,7 +11,7 @@ No `.env.local` file or external service is required. The app uses the bundled d
 
 ## Set the agency details
 
-Before publishing, edit `src/lib/data/site-data.ts` and confirm the agency phone number, WhatsApp number (international format, digits only), email, address, car rates, and images. The current values include sample contact details.
+Before publishing, edit `src/lib/data/site-data.ts` and confirm the agency phone number, WhatsApp number (international format, digits only), email, address, vehicle details, and images. The current values include sample contact details. Configure all public vehicle rates in `src/lib/data/vehicle-rates.ts`; omit any unconfirmed rate or charge.
 
 When a customer submits an enquiry, the site opens WhatsApp with their name, phone, trip, and selected vehicle prefilled. The customer must send the message from WhatsApp. The site does not store enquiries or notify an admin independently.
 
