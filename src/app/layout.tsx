@@ -10,6 +10,7 @@ export const metadata: Metadata = {
   title: { default: SITE_NAME, template: `%s | ${SITE_NAME}` },
   description: SITE_DESCRIPTION,
   applicationName: SITE_NAME,
+  icons: { icon: { url: "/favicon.png", type: "image/png" } },
   appleWebApp: { capable: true, statusBarStyle: "default", title: SITE_NAME },
   formatDetection: { telephone: true },
 };
