@@ -25,7 +25,7 @@ export const VEHICLE_RATES = {
     localPerKm: 20,
     outstationPerKm: 20,
     airportFlat: 2000,
-    package: { km: 300, total: 4800 },
+    package: { km: 300, total: 6000 },
   },
   "chevrolet-enjoy": {
     localPerKm: 16,
